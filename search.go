@@ -21,6 +21,18 @@ type SearchResponse struct {
 	Metadata SearchMetadata `json:"search_metadata"`
 }
 
+type SearchFullArchiveResponse struct {
+	Results           []Tweet                      `json:"results"`
+	Next              string                       `json:"next"`
+	RequestParameters FullArchiveRequestParameters `json:"requestParameters"`
+}
+
+type FullArchiveRequestParameters struct {
+	MaxResults int    `json:"maxResults"`
+	FromDate   string `json:"fromData"`
+	ToDate     string `json:"toDate"`
+}
+
 func (sr *SearchResponse) GetNext(a *TwitterApi) (SearchResponse, error) {
 	if sr.Metadata.NextResults == "" {
 		return SearchResponse{}, nil
@@ -56,12 +68,12 @@ func (a TwitterApi) GetSearch(queryString string, v url.Values) (sr SearchRespon
 	return sr, err
 }
 
-func (a TwitterApi) GetSearchFromFullArchive(queryString string, v url.Values, envName string) (sr SearchResponse, err error) {
+func (a TwitterApi) GetSearchFromFullArchive(queryString string, v url.Values, envName string) (sfar SearchFullArchiveResponse, err error) {
 	v = cleanValues(v)
 	v.Set("query", queryString)
 	v.Set("isPremiumAPI", "true")
 	response_ch := make(chan response)
-	a.queryQueue <- query{a.baseUrl + "/tweets/search/fullarchive/" + envName + ".json", v, &sr, _GET, response_ch}
+	a.queryQueue <- query{a.baseUrl + "/tweets/search/fullarchive/" + envName + ".json", v, &sfar, _GET, response_ch}
 
 	// We have to read from the response channel before assigning to timeline
 	// Otherwise this will happen before the responses have been written
