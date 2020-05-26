@@ -226,6 +226,7 @@ func (c TwitterApi) apiGet(urlStr string, form url.Values, data interface{}) err
 		form.Del("tweet_mode")
 	}
 	resp, err := c.oauthClient.Get(c.HttpClient, c.Credentials, urlStr, form)
+	fmt.Println("resp is below:\n", resp)
 	if err != nil {
 		return err
 	}
