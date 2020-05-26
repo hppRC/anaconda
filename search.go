@@ -55,3 +55,16 @@ func (a TwitterApi) GetSearch(queryString string, v url.Values) (sr SearchRespon
 	err = resp.err
 	return sr, err
 }
+
+func (a TwitterApi) GetSearchFromFullArchive(queryString string, v url.Values, envName string) (sr SearchResponse, err error) {
+	v = cleanValues(v)
+	v.Set("q", queryString)
+	response_ch := make(chan response)
+	a.queryQueue <- query{a.baseUrl + "/tweets/search/fullarchive/" + envName + ".json", v, &sr, _GET, response_ch}
+
+	// We have to read from the response channel before assigning to timeline
+	// Otherwise this will happen before the responses have been written
+	resp := <-response_ch
+	err = resp.err
+	return sr, err
+}
