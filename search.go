@@ -43,7 +43,7 @@ func (sr *SearchResponse) GetNext(a *TwitterApi) (SearchResponse, error) {
 	return newSr, err
 }
 
-func (a TwitterApi) GetSearchHuga(queryString string, v url.Values) (sr SearchResponse, err error) {
+func (a TwitterApi) GetSearch(queryString string, v url.Values) (sr SearchResponse, err error) {
 	v = cleanValues(v)
 	v.Set("q", queryString)
 	response_ch := make(chan response)
