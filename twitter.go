@@ -221,6 +221,7 @@ func cleanValues(v url.Values) url.Values {
 // apiGet issues a GET request to the Twitter API and decodes the response JSON to data.
 func (c TwitterApi) apiGet(urlStr string, form url.Values, data interface{}) error {
 	form = defaultValues(form)
+	fmt.Println(form.Get("test_yeah"))
 	resp, err := c.oauthClient.Get(c.HttpClient, c.Credentials, urlStr, form)
 	if err != nil {
 		return err
