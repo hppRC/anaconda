@@ -58,7 +58,7 @@ func (a TwitterApi) GetSearch(queryString string, v url.Values) (sr SearchRespon
 
 func (a TwitterApi) GetSearchFromFullArchive(queryString string, v url.Values, envName string) (sr SearchResponse, err error) {
 	v = cleanValues(v)
-	v.Set("q", queryString)
+	v.Set("query", queryString)
 	response_ch := make(chan response)
 	a.queryQueue <- query{a.baseUrl + "/tweets/search/fullarchive/" + envName + ".json", v, &sr, _GET, response_ch}
 
