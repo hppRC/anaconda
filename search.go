@@ -79,5 +79,5 @@ func (a TwitterApi) GetSearchFromFullArchive(queryString string, v url.Values, e
 	// Otherwise this will happen before the responses have been written
 	resp := <-response_ch
 	err = resp.err
-	return sr, err
+	return sfar, err
 }
